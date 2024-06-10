@@ -48,9 +48,9 @@ export class SignupComponent implements OnInit{
           },
           error: (e) => {
             if (e.code === 'auth/email-already-in-use') {
-              this.toastr.error('The email address is already in use.', 'dismiss'); // Set user-friendly message
+              this.toastr.error('The email address is already in use.', 'dismiss'); 
             } else {
-              this.toastr.error("something happened", 'dismiss'); // Handle other errors
+              this.toastr.error("something happened", 'dismiss'); 
             }
           },
           complete: () => {
