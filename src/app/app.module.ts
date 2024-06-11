@@ -19,8 +19,8 @@ import { AuthService } from './services/auth.service';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthGuard } from './services/AuthGuard';
 import { StoreModule } from '@ngrx/store';
-
-
+import { VideoUploadComponent } from './pages/video-upload/video-upload.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +28,8 @@ import { StoreModule } from '@ngrx/store';
     LayoutComponent,
     LoginComponent,
     VideoLibraryComponent,
-    SignupComponent
+    SignupComponent,
+    VideoUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +38,7 @@ import { StoreModule } from '@ngrx/store';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     StoreModule.forRoot(),
