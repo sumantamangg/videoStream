@@ -18,7 +18,7 @@ export class VideoLibraryComponent implements OnInit{
   currentUser: any = null;
   @ViewChild('videoPlayer') videoPlayer: ElementRef<HTMLVideoElement>;
   currentTime = 0;
-  isPlaying = false;
+  isPlaying = true;
   videoState: Video;
 
   constructor(private firestore: AngularFirestore,
@@ -51,11 +51,13 @@ export class VideoLibraryComponent implements OnInit{
       this.currentTime = videoState.currentTime;
       this.isPlaying = videoState['isPlaying'];
       this.isPlaying ? this.videoPlayer.nativeElement.play(): this.videoPlayer.nativeElement.pause();
+
     });
 
   }
 
   onSeek(e) {
+    console.log("dkdkd");
     this.videoPlayer.nativeElement.currentTime = e.target.value;
   }
 

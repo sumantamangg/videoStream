@@ -1,7 +1,8 @@
 
     <video #videoPlayer controls (loadedmetadata)="onLoadedMetadata($event)" 
-          (play)="playPause(true)" (pause)="playPause(false)"
-          class="embed-responsive embed-responsive-16by9 fixed-video-height"  >
+          (play)="playPause(true)" (pause)="playPause(false)" (change)="onSeek($event)"
+          class="embed-responsive embed-responsive-16by9 fixed-video-height" 
+          [autoplay]="isPlaying" >
       <source *ngIf="videoUrl?.url" [src]="videoUrl.url" type="video/mp4">
     </video>
 
