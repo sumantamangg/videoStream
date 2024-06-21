@@ -21,6 +21,8 @@ import { AuthGuard } from './services/AuthGuard';
 import { StoreModule } from '@ngrx/store';
 import { VideoUploadComponent } from './pages/video-upload/video-upload.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { videoReducer } from './state/video.reducer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LoginComponent,
     VideoLibraryComponent,
     SignupComponent,
-    VideoUploadComponent
+    VideoUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ToastrModule.forRoot(),
     StoreModule.forRoot(),
     AngularFireModule.initializeApp(firebaseConfig.firebase),   
+    StoreModule.forRoot({video: videoReducer}),
     AngularFireAuthModule
   ],
   providers: [AuthService, AuthGuard],

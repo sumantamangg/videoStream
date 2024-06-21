@@ -1,11 +1,12 @@
 
     <video #videoPlayer controls (loadedmetadata)="onLoadedMetadata($event)" 
-          class="embed-responsive embed-responsive-16by9 fixed-video-height" >
+          (play)="playPause(true)" (pause)="playPause(false)"
+          class="embed-responsive embed-responsive-16by9 fixed-video-height"  >
       <source *ngIf="videoUrl?.url" [src]="videoUrl.url" type="video/mp4">
     </video>
 
 <!-- <input type="range" min="0" max="1" step="0.01" [(ngModel)]="currentTime" (change)="onSeek($event)"> -->
 
-<button (click)="playPause()">
+<button (click)="playPause(!isPlaying)">
   {{ isPlaying ? 'Pause' : 'Play' }}
 </button>
