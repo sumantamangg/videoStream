@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 export class LoginComponent implements OnInit{
 
   loginForm!: FormGroup;
-  currentUser: any = null;
+  currentUser: any ;
   submitInProgress = false;
   error = "";
 
