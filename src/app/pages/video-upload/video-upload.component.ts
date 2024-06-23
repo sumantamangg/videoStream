@@ -45,7 +45,6 @@ export class VideoUploadComponent {
       });
 
       uploadTask.snapshotChanges().subscribe(snapshot => {
-        console.log(snapshot);
         if (snapshot!.state === 'running') {
           // Uploading
         } else if (snapshot!.state === 'success') {
