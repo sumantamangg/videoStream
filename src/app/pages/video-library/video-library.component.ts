@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Video } from '../../state/video.model';
 import { pauseVideo, playVideo } from '../../state/video.action';
 import { selectVideoState } from '../../state/video.selector';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-video-library',
@@ -23,7 +24,8 @@ export class VideoLibraryComponent implements OnInit{
 
   constructor(private firestore: AngularFirestore,
               private authService: AuthService,
-              private store: Store
+              private store: Store,
+              private toastr: ToastrService
   ) { 
     this.authService.currentUser.subscribe(
       userdata => {
@@ -37,9 +39,8 @@ export class VideoLibraryComponent implements OnInit{
       .subscribe(videos => {
         if (videos.length > 0) {
           this.videoUrl = videos[0]; 
-          console.log("irl after subscribe =", this.videoUrl.url); 
         } else {
-          console.log('No video found for user');
+          this.toastr.error('No video found for user');
         }
     });
   }
@@ -57,7 +58,6 @@ export class VideoLibraryComponent implements OnInit{
   }
 
   onSeek(e) {
-    console.log("dkdkd");
     this.videoPlayer.nativeElement.currentTime = e.target.value;
   }
 
