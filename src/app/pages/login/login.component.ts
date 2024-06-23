@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit{
     const password = this.loginForm.get('password')?.value;
     this.authService.signIn(email, password)
       .subscribe({
-        next: ()=> this.toastr.success("User Created"),
+        next: ()=> this.toastr.success("User login success"),
         error: (e) => {
           if (e.code == "auth/invalid-credential"){
             this.toastr.error("Email and password did not match", "try again");
