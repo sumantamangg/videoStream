@@ -1,15 +1,15 @@
 <form #uploadForm="ngForm" (ngSubmit)="onSubmit(uploadForm)">
     <div class="form-group">
       <label for="videoInput">Select Video:</label>
-      <input type="file" class="form-control" id="videoInput" name="video" (change)="onFileChanged($event)" required>
+      <input type="file" class="form-control" id="videoInput" name="video" (change)="onFileChanged($event)" required >
     </div>
     <div class="form-group" *ngIf="isUploading">
       <div class="progress">
         <div class="progress-bar" role="progressbar" [style.width]="uploadProgress + '%'"></div>
       </div>
     </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary" [disabled]="!uploadForm.valid || isUploading">Upload</button>
+    <div class="form-group btn-file-upload">
+      <button type="submit" class="btn btn-primary" [disabled]="!uploadForm.valid || isUploading || !selectedFile">Upload</button>
     </div>
   </form>
   

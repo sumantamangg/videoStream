@@ -55,14 +55,15 @@ export class VideoUploadComponent {
           this.isUploading = false;
           this.uploadProgress = 0;
           this.toastr.success("upload completed");
+          this.selectedFile = null;
           form.reset();
+          //window.location.reload();
         }
       });
     }
   }
   storeVideoUrlInFirestore(url: string){
     const userVideosRef = this.firestore.collection(this.currentUser?.uid);
-        // .doc(this.currentUser?.uid).collection('videos');
     userVideosRef.add({ url }).then(() => { 
       console.log('Video URL stored in Firestore!');
     });
