@@ -4,7 +4,7 @@ import * as VideoActions from './video.action';
 import { Video } from './video.model';
 
 const initialState: Video = {
-  isPlaying: true,
+  isPlaying: false,
   currentTime: 0,
   duration: 0,
   volume: 4,

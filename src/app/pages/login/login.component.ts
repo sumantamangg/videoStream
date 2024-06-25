@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit{
         },
         complete: ()=>{
           this.loginForm.reset();
-          this.router.navigate(["/gallery"]);
+          this.router.navigate(["/upload"]);
         }
       })
     this.submitInProgress = false;
