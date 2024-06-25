@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { Video } from '../../state/video.model';
@@ -16,16 +16,17 @@ import { ToastrService } from 'ngx-toastr';
 export class VideoLibraryComponent implements OnInit{
 
   videoUrl: any = "";
+  videoName = "";
   currentUser: any = null;
   @ViewChild('videoPlayer') videoPlayer: ElementRef<HTMLVideoElement>;
   currentTime = 0;
-  isPlaying = true;
+  isPlaying = false;
   videoState: Video;
 
   constructor(private firestore: AngularFirestore,
               private authService: AuthService,
               private store: Store,
-              private toastr: ToastrService
+              private toastr: ToastrService,
   ) { 
     this.authService.currentUser.subscribe(
       userdata => {
@@ -35,24 +36,30 @@ export class VideoLibraryComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.firestore.collection(this.currentUser.uid).valueChanges() 
+    this.firestore.collection(this.currentUser.uid, ref =>
+        ref.orderBy('timeStamp', 'desc').limit(1)
+    ).valueChanges()
+      .pipe(take(1))
       .subscribe(videos => {
         if (videos.length > 0) {
-          this.videoUrl = videos[0]; 
+          const latestVideo = videos[0];
+          this.videoUrl = latestVideo['url']; 
+          this.videoName = latestVideo['nameFile']; 
+          console.log("video url = "+this.videoUrl);
+          this.toastr.success(this.videoName + " loaded");
         } else {
-          this.toastr.error('No video found for user');
+          this.toastr.error('No video found for the user');
         }
-    });
+      });
   }
-
+  
   onLoadedMetadata(e) {
-    this.videoPlayer.nativeElement.currentTime = this.currentTime; // Set initial position if any
+    this.videoPlayer.nativeElement.currentTime = this.currentTime; 
     this.videoPlayer.nativeElement.setAttribute('max', String(e.currentTarget.duration));
     this.store.select(selectVideoState).subscribe(videoState => {
       this.currentTime = videoState.currentTime;
       this.isPlaying = videoState['isPlaying'];
       this.isPlaying ? this.videoPlayer.nativeElement.play(): this.videoPlayer.nativeElement.pause();
-
     });
 
   }
