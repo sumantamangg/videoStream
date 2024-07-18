@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand navbar-app-name" routerLink="/">Video Translator</a>
+      <button *ngIf="currentUser != null" class="btn btn-outline-secondary" routerLink="/upload">Upload File</button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <button [disabled]="currentUser === null" class="btn btn-outline-primary" (click)="logout()">Logout</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

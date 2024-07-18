@@ -1,0 +1,10 @@
+
+.page-content {
+    width: 80%;  /* Adjust as desired */
+    height: fit-content;
+    margin: 20px auto;  /* Center the content horizontally */
+    border: 1px solid #ddd;  /* Optional border for definition */
+    background-color: #dcd5d5;  /* Set a background color */
+    padding: 20px;;
+  }
+    
