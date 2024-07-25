@@ -1,22 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore, AngularFirestoreCollection, QueryFn } from '@angular/fire/compat/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AppRoutes } from '../../app.routes';
 
 @Component({
   selector: 'app-video-upload',
   templateUrl: './video-upload.component.html',
   styleUrl: './video-upload.component.css'
 })
-export class VideoUploadComponent {
+export class VideoUploadComponent implements OnDestroy{
   selectedFile!: File;
   uploadProgress: number = 0;
   isUploading: boolean = false;
   currentUser:any = null;
   fileName = "";
+  subscription: Subscription
 
   constructor(private storage: AngularFireStorage,
               private toastr: ToastrService,
@@ -24,7 +27,7 @@ export class VideoUploadComponent {
               private authService: AuthService,
               private router: Router
   ) {
-    this.authService.currentUser.subscribe(
+    this.subscription =  this.authService.currentUser.subscribe(
       userdata => {
         this.currentUser = userdata;
       }
@@ -57,8 +60,11 @@ export class VideoUploadComponent {
           this.isUploading = false;
           this.uploadProgress = 0;
           this.toastr.success("upload completed");
+          this.router.navigate(['/gallery']); 
+          //This code makes sure the file is ready to be played, 
+          //the firebase takes split second to update the db
           setTimeout(() => {
-            this.router.navigate(['/gallery']); //This code makes sure the file is ready to be played
+            this.router.navigate([AppRoutes.Gallery]);
           }, 1200);
         }
       });
@@ -77,4 +83,7 @@ export class VideoUploadComponent {
   });
 }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

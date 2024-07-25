@@ -1,29 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit, OnDestroy{
 
   loginForm!: FormGroup;
   currentUser: any ;
   submitInProgress = false;
   error = "";
+  subscription: Subscription
 
   constructor(private fb: FormBuilder,
-              private authService: AuthService,
+              private readonly  authService: AuthService,
               private router: Router,
               private toastr: ToastrService,
               private store: Store
   ){
-    this.authService.currentUser.subscribe(
+    this.subscription = this.authService.currentUser.subscribe(
       userdata => {
         this.currentUser = userdata;
       }
@@ -40,9 +42,14 @@ export class LoginComponent implements OnInit{
     })
   }
   onSubmit(){
+    if (this.loginForm.invalid) {
+      this.toastr.error('Please fill out the form correctly.', 'Validation Error');
+      return;
+    }
     this.submitInProgress = true;
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
+    
     this.authService.signIn(email, password)
       .subscribe({
         next: ()=> this.toastr.success("User login success"),
@@ -57,5 +64,9 @@ export class LoginComponent implements OnInit{
         }
       })
     this.submitInProgress = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

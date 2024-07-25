@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -7,13 +7,14 @@ import { Video } from '../../state/video.model';
 import { pauseVideo, playVideo } from '../../state/video.action';
 import { selectVideoState } from '../../state/video.selector';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-video-library',
   templateUrl: './video-library.component.html',
   styleUrl: './video-library.component.css'
 })
-export class VideoLibraryComponent implements OnInit{
+export class VideoLibraryComponent implements OnInit, OnDestroy{
 
   videoUrl: any = "";
   videoName = "";
@@ -22,13 +23,14 @@ export class VideoLibraryComponent implements OnInit{
   currentTime = 0;
   isPlaying = false;
   videoState: Video;
+  subscription: Subscription
 
   constructor(private firestore: AngularFirestore,
               private authService: AuthService,
               private store: Store,
               private toastr: ToastrService,
   ) { 
-    this.authService.currentUser.subscribe(
+    this.subscription = this.authService.currentUser.subscribe(
       userdata => {
         this.currentUser = userdata;
       }
@@ -45,7 +47,6 @@ export class VideoLibraryComponent implements OnInit{
           const latestVideo = videos[0];
           this.videoUrl = latestVideo['url']; 
           this.videoName = latestVideo['nameFile']; 
-          console.log("video url = "+this.videoUrl);
           this.toastr.success(this.videoName + " loaded");
         } else {
           this.toastr.error('No video found for the user');
@@ -75,6 +76,10 @@ export class VideoLibraryComponent implements OnInit{
     } else {
       this.store.dispatch(pauseVideo());
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
   
 }
