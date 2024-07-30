@@ -1,16 +1,23 @@
 <div class="container">
-    <h1 class="text-center mt-5">Login</h1>
-    <form [formGroup]="loginForm"  (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" id="username" formControlName = "email" required>
+  <h1 class="text-center mt-5">Login</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" formControlName="email" required>
+      <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-danger">
+        <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address.</div>
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" formControlName="password" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" formControlName="password" required>
+      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-danger">
+        <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</div>
+        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</div>
       </div>
-      <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || submitInProgress">Login</button>
-      <a class="float-end mt-2" routerLink="/signup">Sign Up</a>
-    </form>
-  </div>
-  
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || submitInProgress">Login</button>
+    <a class="float-end mt-2" routerLink="/signup">Sign Up</a>
+  </form>
+</div>
